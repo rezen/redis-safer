@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  client:
+    depends_on: 
+      - server
+    build:
+      context: ./
+      dockerfile: Dockerfile.client
+    environment: []
+    command: bash -c "/etc/init.d/stunnel4 start && tail -f /var/log/stunnel4/stunnel.log"
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile.server
+    command: bash -c "/etc/init.d/stunnel4 start && redis-server /etc/redis.conf"
+    ports:
+      - "6379:6379"

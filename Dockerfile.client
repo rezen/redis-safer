@@ -1,0 +1,5 @@
+FROM redis:5.0.5-stretch
+RUN apt-get -y update && apt-get -y install stunnel4 procps vim net-tools
+
+COPY ./etc/stunnel/redis-server.crt ./etc/stunnel/redis-client.conf /etc/stunnel/
+COPY ./etc/default/stunnel4 /etc/default/stunnel4
