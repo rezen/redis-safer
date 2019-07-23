@@ -7,7 +7,7 @@ There are a few tutorials on using `stunnel` to help secure your `redis-server` 
 **Create certs**  
 ```sh
 mkdir -p ./etc/stunnel
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  ./etc/stunnel/redis-server.key -out  ./etc/stunnel/redis-server.crt  -subj "/C=US/ST=California/L=San Francisco/O=security/OU=security/CN=redis.dev"
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  ./etc/stunnel/redis-server.key -out  ./etc/stunnel/redis-server.crt  -subj "/C=US/ST=California/L=San Francisco/O=security/OU=security/CN=server"
 chmod 600 ./etc/stunnel/redis-server.key
 ```
 

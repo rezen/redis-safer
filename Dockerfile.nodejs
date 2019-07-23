@@ -1,0 +1,6 @@
+FROM node:12.6-stretch
+RUN npm install redis && mkdir -p /app
+
+COPY ./etc/stunnel/redis-server.crt ./etc/stunnel/redis-client.conf /etc/stunnel/
+COPY client.js /app/
+CMD node /app/client.js

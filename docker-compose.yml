@@ -1,18 +1,44 @@
 version: '3'
 
 services:
-  client:
+  client-python:
     depends_on: 
       - server
     build:
       context: ./
-      dockerfile: Dockerfile.client
+      dockerfile: Dockerfile.python
     environment: []
-    command: bash -c "/etc/init.d/stunnel4 start && tail -f /var/log/stunnel4/stunnel.log"
+    command: python /app/client.py
+  
+  client-nodejs:
+    depends_on: 
+      - server
+    build:
+      context: ./
+      dockerfile: Dockerfile.nodejs
+    environment: []
+    command: node /app/client.js
+  
+  client-cli:
+    depends_on: 
+      - server
+    build:
+      context: ./
+      dockerfile: Dockerfile.redis
+    environment: []
+    command: >
+      bash -c "rm /etc/stunnel/redis-server.conf 
+      && /etc/init.d/stunnel4 start 
+      && redis-cli -p 8000 ping 
+      && printf \"\n[i] cli worked!\n\n\""
+  
   server:
     build:
       context: ./
-      dockerfile: Dockerfile.server
-    command: bash -c "/etc/init.d/stunnel4 start && redis-server /etc/redis.conf"
+      dockerfile: Dockerfile.redis
+    command: >
+      bash -c "rm /etc/stunnel/redis-client.conf 
+      && /etc/init.d/stunnel4 start 
+      && redis-server /etc/redis.conf"
     ports:
       - "6379:6379"

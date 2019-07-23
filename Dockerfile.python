@@ -1,0 +1,6 @@
+FROM python:3.7-stretch
+RUN pip install redis && mkdir -p /app
+
+COPY ./etc/stunnel/redis-server.crt ./etc/stunnel/redis-client.conf /etc/stunnel/
+COPY client.py /app/
+CMD python /app/client.py
