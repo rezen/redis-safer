@@ -42,3 +42,25 @@ services:
       && redis-server /etc/redis.conf"
     ports:
       - "6379:6379"
+
+  proxy:
+    depends_on: 
+      - server
+    image: haproxy:2.1
+    volumes: 
+      - ./etc/haproxy/:/usr/local/etc/haproxy:ro
+    ports: 
+      - "6443:6443"
+  
+  proxy-cli:
+    depends_on: 
+      - proxy
+    build:
+      context: ./
+      dockerfile: Dockerfile.redis
+    environment: []
+    command: >
+      bash -c "rm /etc/stunnel/redis-server.conf 
+      && /etc/init.d/stunnel4 start 
+      && redis-cli -p 8001 ping 
+      && printf \"\n[i] cli worked!\n\n\""
